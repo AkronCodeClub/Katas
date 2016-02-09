@@ -2,6 +2,8 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
+-define(DEFAULT_PRICE, 8).
+
 -export([price/1]).
 
 price(NumberList) ->
@@ -13,7 +15,7 @@ discount_lists(MasterList, DiscountedLists) ->
     discount_lists(lists:usort(MasterList), MasterList, DiscountedLists).
 
 discount_lists(SingleUniqueBook, MasterList, DiscountedLists) when length(SingleUniqueBook) =:= 1 ->
-    calculate_cost(DiscountedLists, length(MasterList) * 8);
+    calculate_cost(DiscountedLists, length(MasterList) * ?DEFAULT_PRICE);
 discount_lists(NewDiscountedListOfBooks, MasterList, DiscountedLists) ->
     discount_lists(delete_repeated_books(MasterList, NewDiscountedListOfBooks), [NewDiscountedListOfBooks|DiscountedLists]).
 
@@ -23,16 +25,13 @@ delete_repeated_books(ListToBeDeleted, [H|T]) ->
 
 calculate_cost([], Cost) ->
     Cost;
-calculate_cost([DiscountList|RestOfTheDiscountLists], Cost) when length(DiscountList) =:= 5 ->
-    calculate_cost(RestOfTheDiscountLists, (8*5*0.75) + Cost);
-calculate_cost([DiscountList|RestOfTheDiscountLists], Cost) when length(DiscountList) =:= 4 ->
-    calculate_cost(RestOfTheDiscountLists, (8*4*0.80) + Cost);
-calculate_cost([DiscountList|RestOfTheDiscountLists], Cost) when length(DiscountList) =:= 3 ->
-    calculate_cost(RestOfTheDiscountLists, (8*3*0.90) + Cost);
-calculate_cost([DiscountList|RestOfTheDiscountLists], Cost) when length(DiscountList) =:= 2 ->
-    calculate_cost(RestOfTheDiscountLists, (8*2*0.95) + Cost);
-calculate_cost([_DiscountList|RestOfTheDiscountLists], Cost) ->
-    calculate_cost(RestOfTheDiscountLists, 8 + Cost).
+calculate_cost([DiscountList|RestOfTheDiscountLists], Cost) ->
+    calculate_cost(RestOfTheDiscountLists, (?DEFAULT_PRICE*calculate_discount(length(DiscountList))) + Cost).
+
+calculate_discount(N) when N =< 3 ->
+    N * (1 - ((N - 1) * 0.05));
+calculate_discount(N) ->
+    N * (1 - ((N - 1) * 0.05) - 0.05).
 
 -ifdef(EUNIT).
 
