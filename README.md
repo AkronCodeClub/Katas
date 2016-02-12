@@ -16,4 +16,5 @@ Where do I find these katas? A quick Google search serves up these sites. There 
 - [codekata.com](http://codekata.com/)
 - [codekatas.org](http://www.codekatas.org/)
 - [codingdojo.org](http://codingdojo.org/cgi-bin/index.pl?KataCatalogue)
+- [projecteuler.net](https://projecteuler.net)
 - Video Screencasts w/ Commentary at [katas.softwarecraftsmanship.org](http://katas.softwarecraftsmanship.org/)
