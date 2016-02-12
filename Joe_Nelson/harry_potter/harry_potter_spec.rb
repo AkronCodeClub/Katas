@@ -6,27 +6,20 @@ def calc_price(books)
   price = 0
   until books.empty? do
     unique_book_set = books.uniq
-    discount_multiplier = calc_discount_multiplier(unique_book_set.length)
+    discount_multiplier = calc_discount_multiplier(unique_book_set)
     price += unique_book_set.length * 8 * discount_multiplier
-    unique_book_set.each do |book|
-      books.slice!(books.find_index(book))
-    end
+    unique_book_set.each {|book| books.delete_at(books.index(book))}
   end
   price
 end
 
 def calc_discount_multiplier(num_books)
-  case num_books
-    when 2
-      0.95
-    when 3
-      0.90
-    when 4
-      0.80
-    when 5
-      0.75
-    else
-      1
+  case num_books.length
+    when 2 then 0.95
+    when 3 then 0.90
+    when 4 then 0.80
+    when 5 then 0.75
+    else 1
   end
 end
 
@@ -51,13 +44,6 @@ describe '#best_sets' do
 end
 
 #not working yet.
-def best_sets book_arr
-  unique_books = book_arr.uniq
-  set_of_sets = []
-  set = []
-  unique_books.each do |book|
-    set = []
-    set << book_arr.slice!(book_arr.find_index(book))
-  end
-  set_of_sets << set
+def best_sets books
+
 end
