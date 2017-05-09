@@ -6,11 +6,13 @@ This script will create the table you need for the statement to work. It has thr
 
 * `frame` is the frame number of the ball thrown. Valid values are 1-10.
 * `ball` is the number of the ball thrown within the frame. Valid values are 1 or 2. You cannot have a 2 without a 1 in the same frame. 3 is valid in the 10th frame, if it also has a 1 and a 2.
-* `pins` is the number of pins that were knocked down with that ball.
+* `pins` is the number of pins that were knocked down with that ball. Valid values are 0-10.
+
+None of the data constraints are implemented. You're on the honor system.
 
 ### [bowling.sql](bowling.sql)
 
-This is where the magic is. Here is how it works.
+This is where the magic happens. Here is how it works.
 
 1. `Lines 8-10` calculates the total pins and number of balls thrown in each frame.
 1. `Lines 11-13` join the bowling table again to get the next three balls if they are known. These are the bonus balls for spares and strikes.
