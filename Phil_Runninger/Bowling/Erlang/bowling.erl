@@ -4,6 +4,7 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
+score(Balls) when is_binary(Balls) -> score(parse_string_to_list_of_throws(Balls));
 score(Balls) -> score(0, 1, Balls).
 
 % exit conditions
@@ -18,6 +19,18 @@ score(ScoreSoFar, Frame, [Roll1,Roll2,BonusRoll1|Tail]) when Roll1+Roll2 == 10 -
 score(ScoreSoFar, Frame, [Roll1,Roll2|Tail])                                   -> score(ScoreSoFar +Roll1+Roll2,                Frame+1, Tail);
 % incomplete frame
 score(ScoreSoFar, Frame, [Roll1])                                              -> score(ScoreSoFar +Roll1,                      Frame+1, []).
+
+parse_string_to_list_of_throws(Balls) when is_binary(Balls) ->
+    lists:reverse(
+      lists:foldl(
+        fun($|, Acc)          -> Acc;               % frame delimiter: ignore it.
+           ($-, Acc)          -> [0 | Acc];         % gutter ball: 0
+           ($/, [Prev|_]=Acc) -> [10 - Prev | Acc]; % spare: 10 - previous throw
+           ($X, Acc)          -> [10 | Acc];        % strike: 10
+           (H, Acc)           -> [H - $0 | Acc]     % 1-9: convert from string to integer.
+        end,
+        [],
+        binary_to_list(Balls))).
 
 % To test, in Erlang shell,          1> c(bowling).
 %                                    2> bowling:test().
@@ -53,3 +66,15 @@ full_game_2_test() ->                        ?assertEqual(155, score([3,5,  10, 
 full_game_3_test() ->                        ?assertEqual( 53, score([1,0,  1,1,  0,6,  5,3,  0,6,  0,0,  5,2,  7,1,  0,6,  3,6])).
 perfect_game_test() ->                       ?assertEqual(300, score([10,   10,   10,   10,   10,   10,   10,   10,   10,   10,10,10])).
 first_ball_only_test() ->                    ?assertEqual(  4, score([4])).
+
+open_frame_parse_string_test() ->            ?assertEqual([1,2,3,4], parse_string_to_list_of_throws(<<"12|34">>)).
+another_open_frame_parse_string_test() ->    ?assertEqual([2,3,4,5], parse_string_to_list_of_throws(<<"23|45">>)).
+gutterball_parse_string_test() ->            ?assertEqual([1,0,0,4], parse_string_to_list_of_throws(<<"1-|-4">>)).
+spare_parse_string_test() ->                 ?assertEqual([1,9,0,4], parse_string_to_list_of_throws(<<"1/|-4">>)).
+strike_parse_string_test() ->                ?assertEqual([10,4,2], parse_string_to_list_of_throws(<<"X|42">>)).
+
+calculate_score_from_string_test_() ->      [?_assertEqual(187, score(<<"X|9/|5/|72|X|X|X|9-|8/|9/||X">>)),
+                                             ?_assertEqual(300, score(<<"X|X|X|X|X|X|X|X|X|X||XX">>)),
+                                             ?_assertEqual(90, score(<<"9-|9-|9-|9-|9-|9-|9-|9-|9-|9-||">>)),
+                                             ?_assertEqual(150, score(<<"5/|5/|5/|5/|5/|5/|5/|5/|5/|5/||5">>)),
+                                             ?_assertEqual(167, score(<<"X|7/|9-|X|-8|8/|-6|X|X|X||81">>))].
