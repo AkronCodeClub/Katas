@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<test-results name="D:\projects.git\ACC\Katas\Ryan_Potts\BullCow\TestBullCow.exe" total="2" errors="0" failures="0" ignored="0" inconclusive="0" not-run="0" skipped="0" invalid="0" date="2018-03-12" time="0.001">
+  <culture-info current-culture="en" current-uiculture="en" />
+  <test-suite type="Assembly" name="TestBullCow.exe" executed="true" result="Success" success="True" time="0.001" asserts="0">
+    <results>
+        <test-suite type="Namespace" name="uTestBullCow" executed="true" result="Success" success="True" time="0.001" asserts="0" >
+          <results>
+              <test-suite type="Fixture" name="TTestBullCow" executed="True" result="Success" success="True" time="0.001" >
+                <results>
+                  <test-case name="MakeCorrectGuessInFirstTry" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="MakeCorrectGuessInSecondTry" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                </results>
+              </test-suite>
+          </results>
+        </test-suite>
+    </results>
+  </test-suite>
+</test-results>
